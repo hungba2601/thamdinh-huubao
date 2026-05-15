@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THẨM ĐỊNH DỰ ÁN - Hệ thống hỗ trợ pháp lý</title>
+    <meta name="description" content="Hệ thống tự động thẩm định dự án dựa trên các văn bản quy định và nguồn dữ liệu pháp lý.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">⚖️</span>
+                <h1>THẨM ĐỊNH DỰ ÁN</h1>
+            </div>
+            <div class="actions-header">
+                <button id="home-btn" class="secondary-btn-header" title="Quay lại trang chủ">🏠</button>
+                <button id="settings-btn" class="settings-btn-header" title="Cài đặt API Key">⚙️</button>
+            </div>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <div class="card source-card">
+                    <div class="card-header">
+                        <h2>1. Nguồn Dữ Liệu (Quy định/Văn bản)</h2>
+                        <p>Tải lên các file PDF chứa quy định, tiêu chuẩn để làm căn cứ.</p>
+                    </div>
+                    <div class="drop-zone" id="source-drop-zone">
+                        <div class="drop-zone-content">
+                            <span class="icon">📚</span>
+                            <p>Kéo thả hoặc click để chọn nhiều file PDF</p>
+                            <input type="file" id="source-files" multiple accept=".pdf" hidden>
+                        </div>
+                    </div>
+                    <div class="file-list" id="source-file-list"></div>
+                </div>
+
+                <div class="card project-card">
+                    <div class="card-header">
+                        <h2>2. Hồ Sơ Dự Án</h2>
+                        <p>Tải lên file PDF nội dung dự án cần thẩm định.</p>
+                    </div>
+                    <div class="drop-zone" id="project-drop-zone">
+                        <div class="drop-zone-content">
+                            <span class="icon">🏗️</span>
+                            <p>Kéo thả hoặc click để chọn file PDF dự án</p>
+                            <input type="file" id="project-file" accept=".pdf" hidden>
+                        </div>
+                    </div>
+                    <div class="file-list" id="project-file-list"></div>
+                </div>
+            </section>
+
+            <section class="action-section">
+                <button id="analyze-btn" class="primary-btn" disabled>Bắt đầu Thẩm định</button>
+            </section>
+
+            <section class="result-section" id="result-section" style="display: none;">
+                <div class="card result-card">
+                    <div class="card-header">
+                        <h2>Kết Quả Thẩm Định</h2>
+                    </div>
+                    <div id="loading-spinner" class="spinner-container" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Đang phân tích dữ liệu...</p>
+                    </div>
+                    <div id="result-content" class="result-content">
+                        <!-- Kết quả sẽ hiện ở đây -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="copyright">
+                <p>Made by Nguyễn Phi Hùng</p>
+            </div>
+        </footer>
+    </div>
+
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <h3>Cấu hình AI</h3>
+            <p>Sử dụng: <strong>Gemini 3 Flash Preview</strong></p>
+            <div class="input-group">
+                <label for="api-key-input">Gemini API Key:</label>
+                <input type="password" id="api-key-input" placeholder="Nhập API Key...">
+            </div>
+            <div class="modal-actions">
+                <button id="save-settings" class="primary-btn">Lưu Cấu Hình</button>
+                <button id="close-modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
