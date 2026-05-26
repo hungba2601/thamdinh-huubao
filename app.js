@@ -34,6 +34,36 @@ const closeModal = document.getElementById('close-modal');
 const exportActions = document.getElementById('export-actions');
 const exportDocxBtn = document.getElementById('export-docx-btn');
 
+const sourceCountEl = document.getElementById('source-count');
+const sourceListIntegrated = document.getElementById('source-list-integrated');
+const toggleSourcesBtn = document.getElementById('toggle-sources-btn');
+
+// --- Init: Hiển thị nguồn dữ liệu tích hợp ---
+function initIntegratedSources() {
+    const sources = getSourcesList();
+    sourceCountEl.textContent = `${sources.length} văn bản`;
+    
+    let html = '';
+    sources.forEach(src => {
+        html += `
+            <div class="source-item-integrated">
+                <span class="source-cat">${src.category}</span>
+                <span class="source-name">${src.name}</span>
+            </div>
+        `;
+    });
+    sourceListIntegrated.innerHTML = html;
+}
+initIntegratedSources();
+
+// Toggle hiển thị danh sách nguồn
+let sourcesVisible = false;
+toggleSourcesBtn.onclick = () => {
+    sourcesVisible = !sourcesVisible;
+    sourceListIntegrated.style.display = sourcesVisible ? 'block' : 'none';
+    toggleSourcesBtn.textContent = sourcesVisible ? '🔽 Ẩn danh sách' : '📋 Xem danh sách văn bản';
+};
+
 // --- Events ---
 
 // Home Button (Reload/Reset)
@@ -121,9 +151,12 @@ function renderFileList(container, files, onRemove) {
 }
 
 function updateAnalyzeBtn() {
-    analyzeBtn.disabled = !(state.sourceFiles.length > 0 && state.projectFile && state.apiKey);
+    // Nguồn dữ liệu đã tích hợp sẵn, chỉ cần projectFile + apiKey
+    analyzeBtn.disabled = !(state.projectFile && state.apiKey);
     if (!state.apiKey) {
         analyzeBtn.title = "Vui lòng cấu hình API Key trong phần cài đặt";
+    } else if (!state.projectFile) {
+        analyzeBtn.title = "Vui lòng tải lên hồ sơ dự án";
     } else {
         analyzeBtn.title = "";
     }
@@ -153,10 +186,16 @@ analyzeBtn.onclick = async () => {
     resultContent.innerHTML = '';
     
     try {
-        // 1. Extract text from all source files
-        console.log("Extracting sources...");
-        const sourceTexts = await Promise.all(state.sourceFiles.map(f => extractTextFromPDF(f)));
-        const combinedSourceText = sourceTexts.join("\n\n--- FILE NGUỒN MỚI ---\n\n");
+        // 1. Lấy dữ liệu nguồn tích hợp sẵn
+        console.log("Loading integrated sources...");
+        let combinedSourceText = getAllSourcesText();
+        
+        // 1b. Nếu có file PDF bổ sung, trích xuất và ghép thêm
+        if (state.sourceFiles.length > 0) {
+            console.log("Extracting additional PDF sources...");
+            const extraTexts = await Promise.all(state.sourceFiles.map(f => extractTextFromPDF(f)));
+            combinedSourceText += "\n\n===== DỮ LIỆU BỔ SUNG TỪ PDF =====\n\n" + extraTexts.join("\n\n--- FILE BỔ SUNG ---\n\n");
+        }
         
         // 2. Extract text from project file
         console.log("Extracting project...");

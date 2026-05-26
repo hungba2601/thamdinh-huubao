@@ -27,20 +27,31 @@
         </header>
 
         <main>
-            <section class="upload-section">
+            <section class="upload-section upload-section-single">
                 <div class="card source-card">
                     <div class="card-header">
-                        <h2>1. Nguồn Dữ Liệu (Quy định/Văn bản)</h2>
-                        <p>Tải lên các file PDF chứa quy định, tiêu chuẩn để làm căn cứ.</p>
+                        <h2>1. Nguồn Dữ Liệu Tích Hợp</h2>
+                        <p>Các văn bản quy định pháp lý đã được tích hợp sẵn trong hệ thống.</p>
                     </div>
-                    <div class="drop-zone" id="source-drop-zone">
-                        <div class="drop-zone-content">
-                            <span class="icon">📚</span>
-                            <p>Kéo thả hoặc click để chọn nhiều file PDF</p>
-                            <input type="file" id="source-files" multiple accept=".pdf" hidden>
+                    <div class="source-integrated">
+                        <div class="source-status">
+                            <span class="status-badge status-active">✅ Đã tích hợp</span>
+                            <span id="source-count" class="source-count"></span>
                         </div>
+                        <div id="source-list-integrated" class="source-list-integrated"></div>
+                        <button id="toggle-sources-btn" class="toggle-sources-btn">📋 Xem danh sách văn bản</button>
                     </div>
-                    <div class="file-list" id="source-file-list"></div>
+                    <div class="source-extra">
+                        <p class="source-extra-note">💡 Bạn cũng có thể tải thêm file PDF bổ sung (không bắt buộc):</p>
+                        <div class="drop-zone drop-zone-mini" id="source-drop-zone">
+                            <div class="drop-zone-content">
+                                <span class="icon">📎</span>
+                                <p>Kéo thả hoặc click để thêm PDF bổ sung</p>
+                                <input type="file" id="source-files" multiple accept=".pdf" hidden>
+                            </div>
+                        </div>
+                        <div class="file-list" id="source-file-list"></div>
+                    </div>
                 </div>
 
                 <div class="card project-card">
@@ -106,6 +117,7 @@
         </div>
     </div>
 
+    <script src="data-sources.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
