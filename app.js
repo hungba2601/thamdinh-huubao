@@ -196,15 +196,21 @@ NHIỆM VỤ:
 2. Đưa ra các nhận xét chi tiết (điểm nào đúng, điểm nào sai hoặc chưa phù hợp).
 3. Đưa ra kết luận cuối cùng: "ĐỦ ĐIỀU KIỆN" hoặc "KHÔNG ĐỦ ĐIỀU KIỆN".
 
-YÊU CẦU TRẢ VỀ ĐỊNH DẠNG JSON:
+BẮT BUỘC TRẢ VỀ ĐÚNG ĐỊNH DẠNG JSON NHƯ SAU (không thêm bớt key):
 {
-  "status": "SUCCESS" hoặc "FAILED",
+  "status": "SUCCESS",
   "points": [
-    {"title": "Tiêu chí...", "content": "Nhận xét...", "isCorrect": true/false}
+    {"title": "Tên tiêu chí", "content": "Nhận xét chi tiết", "isCorrect": true}
   ],
-  "conclusion": "ĐỦ ĐIỀU KIỆN" hoặc "KHÔNG ĐỦ ĐIỀU KIỆN",
-  "summary": "Tóm tắt ngắn gọn lý do..."
+  "conclusion": "ĐỦ ĐIỀU KIỆN",
+  "summary": "Tóm tắt ngắn gọn"
 }
+
+LƯU Ý QUAN TRỌNG:
+- "points" phải là một mảng (array), mỗi phần tử có đúng 3 trường: "title", "content", "isCorrect"
+- "isCorrect" phải là boolean (true hoặc false)
+- "conclusion" chỉ được là "ĐỦ ĐIỀU KIỆN" hoặc "KHÔNG ĐỦ ĐIỀU KIỆN"
+- Chỉ trả về JSON, không thêm text nào khác
 `;
 
     const response = await fetch(url, {
@@ -220,7 +226,43 @@ YÊU CẦU TRẢ VỀ ĐỊNH DẠNG JSON:
     if (data.error) throw new Error(data.error.message);
     
     const textResult = data.candidates[0].content.parts[0].text;
-    return JSON.parse(textResult);
+    console.log("Raw Gemini response:", textResult);
+    
+    let parsed;
+    try {
+        parsed = JSON.parse(textResult);
+    } catch (e) {
+        throw new Error("Không thể phân tích phản hồi JSON từ AI. Vui lòng thử lại.");
+    }
+    
+    // Validate và normalize kết quả
+    if (!parsed.points || !Array.isArray(parsed.points)) {
+        // Thử tìm mảng points trong các key khác
+        const possibleKeys = Object.keys(parsed);
+        let foundPoints = null;
+        for (const key of possibleKeys) {
+            if (Array.isArray(parsed[key]) && parsed[key].length > 0 && parsed[key][0].title) {
+                foundPoints = parsed[key];
+                break;
+            }
+        }
+        if (foundPoints) {
+            parsed.points = foundPoints;
+        } else {
+            throw new Error("AI trả về dữ liệu không đúng định dạng (thiếu mảng 'points'). Vui lòng thử lại.");
+        }
+    }
+    
+    // Đảm bảo các trường cần thiết tồn tại
+    parsed.conclusion = parsed.conclusion || "KHÔNG XÁC ĐỊNH";
+    parsed.summary = parsed.summary || "Không có tóm tắt.";
+    parsed.points = parsed.points.map(pt => ({
+        title: pt.title || "Tiêu chí không xác định",
+        content: pt.content || pt.description || pt.detail || "Không có nội dung.",
+        isCorrect: pt.isCorrect === true || pt.isCorrect === "true" || pt.is_correct === true
+    }));
+    
+    return parsed;
 }
 
 function displayResult(result) {
@@ -233,10 +275,11 @@ function displayResult(result) {
         <div class="result-badge ${isSuccess ? 'badge-success' : 'badge-error'}">
             ${result.conclusion}
         </div>
-        <p style="margin-bottom: 1.5rem; font-weight: 500;">${result.summary}</p>
+        <p style="margin-bottom: 1.5rem; font-weight: 500;">${result.summary || ''}</p>
     `;
     
-    result.points.forEach(pt => {
+    const points = result.points || [];
+    points.forEach(pt => {
         html += `
             <div class="analysis-point" style="border-left-color: ${pt.isCorrect ? 'var(--accent)' : 'var(--danger)'}">
                 <h4>${pt.isCorrect ? '✅' : '❌'} ${pt.title}</h4>
@@ -248,7 +291,9 @@ function displayResult(result) {
     resultContent.innerHTML = html;
     
     // Hiện nút xuất DOCX
-    exportActions.style.display = 'flex';
+    if (points.length > 0) {
+        exportActions.style.display = 'flex';
+    }
     
     resultSection.scrollIntoView({ behavior: 'smooth' });
 }
