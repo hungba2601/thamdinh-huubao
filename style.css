@@ -373,6 +373,70 @@ main {
     font-weight: 600;
 }
 
+/* Export Button Styles */
+.result-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.export-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    position: relative;
+    overflow: hidden;
+}
+
+.export-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.export-btn:hover::before {
+    left: 100%;
+}
+
+.export-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+}
+
+.export-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.export-btn.exporting {
+    background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+    cursor: wait;
+    box-shadow: none;
+    pointer-events: none;
+}
+
 /* Footer Styles */
 footer {
     text-align: center;

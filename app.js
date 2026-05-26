@@ -6,7 +6,8 @@ const state = {
     projectFile: null,
     apiKey: localStorage.getItem('gemini_api_key') || '',
     modelName: 'gemini-3-flash-preview', // Sử dụng chính xác Gemini 3 Flash Preview
-    isAnalyzing: false
+    isAnalyzing: false,
+    lastResult: null // Lưu kết quả thẩm định gần nhất để xuất DOCX
 };
 
 // DOM Elements
@@ -29,6 +30,9 @@ const settingsModal = document.getElementById('settings-modal');
 const apiKeyInput = document.getElementById('api-key-input');
 const saveSettings = document.getElementById('save-settings');
 const closeModal = document.getElementById('close-modal');
+
+const exportActions = document.getElementById('export-actions');
+const exportDocxBtn = document.getElementById('export-docx-btn');
 
 // --- Events ---
 
@@ -222,6 +226,9 @@ YÊU CẦU TRẢ VỀ ĐỊNH DẠNG JSON:
 function displayResult(result) {
     const isSuccess = result.conclusion === "ĐỦ ĐIỀU KIỆN";
     
+    // Lưu kết quả để xuất DOCX
+    state.lastResult = result;
+    
     let html = `
         <div class="result-badge ${isSuccess ? 'badge-success' : 'badge-error'}">
             ${result.conclusion}
@@ -239,5 +246,321 @@ function displayResult(result) {
     });
     
     resultContent.innerHTML = html;
+    
+    // Hiện nút xuất DOCX
+    exportActions.style.display = 'flex';
+    
     resultSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+// --- Export DOCX ---
+
+exportDocxBtn.onclick = async () => {
+    if (!state.lastResult) return;
+    
+    exportDocxBtn.classList.add('exporting');
+    exportDocxBtn.textContent = '⏳ Đang xuất...';
+    
+    try {
+        await generateDocx(state.lastResult);
+    } catch (err) {
+        console.error('Export DOCX error:', err);
+        alert('Có lỗi khi xuất file DOCX: ' + err.message);
+    } finally {
+        exportDocxBtn.classList.remove('exporting');
+        exportDocxBtn.innerHTML = '📄 Xuất DOCX';
+    }
+};
+
+async function generateDocx(result) {
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, TableRow, TableCell, Table, WidthType, ShadingType } = docx;
+    
+    const isSuccess = result.conclusion === "ĐỦ ĐIỀU KIỆN";
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+    
+    // Tên dự án từ file đã tải
+    const projectName = state.projectFile ? state.projectFile.name.replace('.pdf', '') : 'Dự án';
+    
+    // Tạo các sections cho từng điểm phân tích
+    const analysisParagraphs = [];
+    
+    result.points.forEach((pt, idx) => {
+        // Tiêu đề tiêu chí
+        analysisParagraphs.push(
+            new Paragraph({
+                spacing: { before: 300, after: 100 },
+                children: [
+                    new TextRun({
+                        text: `${pt.isCorrect ? '✔' : '✘'} ${idx + 1}. ${pt.title}`,
+                        bold: true,
+                        size: 24,
+                        color: pt.isCorrect ? '065F46' : '991B1B',
+                        font: 'Times New Roman',
+                    }),
+                ],
+            })
+        );
+        
+        // Nội dung nhận xét
+        analysisParagraphs.push(
+            new Paragraph({
+                spacing: { after: 200 },
+                indent: { left: 360 },
+                children: [
+                    new TextRun({
+                        text: pt.content,
+                        size: 24,
+                        font: 'Times New Roman',
+                    }),
+                ],
+            })
+        );
+        
+        // Trạng thái
+        analysisParagraphs.push(
+            new Paragraph({
+                spacing: { after: 200 },
+                indent: { left: 360 },
+                children: [
+                    new TextRun({
+                        text: 'Kết quả: ',
+                        bold: true,
+                        size: 24,
+                        font: 'Times New Roman',
+                    }),
+                    new TextRun({
+                        text: pt.isCorrect ? 'ĐẠT' : 'KHÔNG ĐẠT',
+                        bold: true,
+                        size: 24,
+                        color: pt.isCorrect ? '065F46' : '991B1B',
+                        font: 'Times New Roman',
+                    }),
+                ],
+            })
+        );
+    });
+    
+    // Tạo bảng tổng hợp tiêu chí
+    const summaryTableRows = [
+        new TableRow({
+            tableHeader: true,
+            children: [
+                new TableCell({
+                    width: { size: 700, type: WidthType.DXA },
+                    shading: { type: ShadingType.SOLID, color: '2563EB' },
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'STT', bold: true, color: 'FFFFFF', size: 22, font: 'Times New Roman' })] })],
+                }),
+                new TableCell({
+                    width: { size: 5500, type: WidthType.DXA },
+                    shading: { type: ShadingType.SOLID, color: '2563EB' },
+                    children: [new Paragraph({ children: [new TextRun({ text: 'Tiêu chí', bold: true, color: 'FFFFFF', size: 22, font: 'Times New Roman' })] })],
+                }),
+                new TableCell({
+                    width: { size: 2000, type: WidthType.DXA },
+                    shading: { type: ShadingType.SOLID, color: '2563EB' },
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Kết quả', bold: true, color: 'FFFFFF', size: 22, font: 'Times New Roman' })] })],
+                }),
+            ],
+        }),
+    ];
+    
+    result.points.forEach((pt, idx) => {
+        summaryTableRows.push(
+            new TableRow({
+                children: [
+                    new TableCell({
+                        children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${idx + 1}`, size: 22, font: 'Times New Roman' })] })],
+                    }),
+                    new TableCell({
+                        children: [new Paragraph({ children: [new TextRun({ text: pt.title, size: 22, font: 'Times New Roman' })] })],
+                    }),
+                    new TableCell({
+                        shading: { type: ShadingType.SOLID, color: pt.isCorrect ? 'D1FAE5' : 'FEE2E2' },
+                        children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: pt.isCorrect ? 'ĐẠT' : 'KHÔNG ĐẠT', bold: true, size: 22, color: pt.isCorrect ? '065F46' : '991B1B', font: 'Times New Roman' })] })],
+                    }),
+                ],
+            })
+        );
+    });
+    
+    const summaryTable = new Table({
+        rows: summaryTableRows,
+        width: { size: 100, type: WidthType.PERCENTAGE },
+    });
+    
+    // Tạo document
+    const doc = new Document({
+        styles: {
+            default: {
+                document: {
+                    run: { font: 'Times New Roman', size: 24 },
+                },
+            },
+        },
+        sections: [{
+            properties: {
+                page: {
+                    margin: { top: 1440, right: 1200, bottom: 1440, left: 1200 },
+                },
+            },
+            children: [
+                // Tiêu đề
+                new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    spacing: { after: 100 },
+                    children: [
+                        new TextRun({
+                            text: 'BÁO CÁO KẾT QUẢ THẨM ĐỊNH DỰ ÁN',
+                            bold: true,
+                            size: 36,
+                            color: '0F172A',
+                            font: 'Times New Roman',
+                        }),
+                    ],
+                }),
+                
+                // Tên dự án
+                new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    spacing: { after: 100 },
+                    children: [
+                        new TextRun({
+                            text: projectName,
+                            bold: true,
+                            size: 28,
+                            color: '2563EB',
+                            font: 'Times New Roman',
+                        }),
+                    ],
+                }),
+                
+                // Ngày thẩm định
+                new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    spacing: { after: 400 },
+                    children: [
+                        new TextRun({
+                            text: `Ngày thẩm định: ${dateStr}`,
+                            italics: true,
+                            size: 22,
+                            color: '64748B',
+                            font: 'Times New Roman',
+                        }),
+                    ],
+                }),
+                
+                // Đường kẻ phân cách
+                new Paragraph({
+                    spacing: { after: 300 },
+                    border: {
+                        bottom: { style: BorderStyle.SINGLE, size: 6, color: '2563EB' },
+                    },
+                    children: [],
+                }),
+                
+                // Kết luận
+                new Paragraph({
+                    spacing: { before: 200, after: 100 },
+                    children: [
+                        new TextRun({
+                            text: 'KẾT LUẬN: ',
+                            bold: true,
+                            size: 28,
+                            font: 'Times New Roman',
+                        }),
+                        new TextRun({
+                            text: result.conclusion,
+                            bold: true,
+                            size: 28,
+                            color: isSuccess ? '065F46' : '991B1B',
+                            font: 'Times New Roman',
+                        }),
+                    ],
+                }),
+                
+                // Tóm tắt
+                new Paragraph({
+                    spacing: { after: 400 },
+                    children: [
+                        new TextRun({
+                            text: result.summary,
+                            size: 24,
+                            font: 'Times New Roman',
+                        }),
+                    ],
+                }),
+                
+                // Phần I: Bảng tổng hợp
+                new Paragraph({
+                    heading: HeadingLevel.HEADING_2,
+                    spacing: { before: 300, after: 200 },
+                    children: [
+                        new TextRun({
+                            text: 'I. BẢNG TỔNG HỢP KẾT QUẢ',
+                            bold: true,
+                            size: 28,
+                            color: '0F172A',
+                            font: 'Times New Roman',
+                        }),
+                    ],
+                }),
+                
+                summaryTable,
+                
+                // Phần II: Chi tiết
+                new Paragraph({
+                    heading: HeadingLevel.HEADING_2,
+                    spacing: { before: 500, after: 200 },
+                    children: [
+                        new TextRun({
+                            text: 'II. PHÂN TÍCH CHI TIẾT',
+                            bold: true,
+                            size: 28,
+                            color: '0F172A',
+                            font: 'Times New Roman',
+                        }),
+                    ],
+                }),
+                
+                ...analysisParagraphs,
+                
+                // Đường kẻ cuối
+                new Paragraph({
+                    spacing: { before: 400, after: 200 },
+                    border: {
+                        bottom: { style: BorderStyle.SINGLE, size: 6, color: '2563EB' },
+                    },
+                    children: [],
+                }),
+                
+                // Chân trang
+                new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    spacing: { before: 200 },
+                    children: [
+                        new TextRun({
+                            text: 'Được tạo bởi Hệ thống Thẩm định Dự án — ',
+                            italics: true,
+                            size: 20,
+                            color: '94A3B8',
+                            font: 'Times New Roman',
+                        }),
+                        new TextRun({
+                            text: 'Made by Nguyễn Phi Hùng',
+                            italics: true,
+                            size: 20,
+                            color: '94A3B8',
+                            font: 'Times New Roman',
+                        }),
+                    ],
+                }),
+            ],
+        }],
+    });
+    
+    // Xuất file
+    const blob = await Packer.toBlob(doc);
+    const fileName = `KetQua_ThamDinh_${projectName}_${now.toISOString().slice(0, 10)}.docx`;
+    saveAs(blob, fileName);
 }
