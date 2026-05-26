@@ -348,17 +348,17 @@ async function generateDocx(result) {
             children: [
                 new TableCell({
                     width: { size: 700, type: WidthType.DXA },
-                    shading: { type: ShadingType.SOLID, color: '2563EB' },
+                    shading: { type: ShadingType.CLEAR, fill: '2563EB' },
                     children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'STT', bold: true, color: 'FFFFFF', size: 22, font: 'Times New Roman' })] })],
                 }),
                 new TableCell({
                     width: { size: 5500, type: WidthType.DXA },
-                    shading: { type: ShadingType.SOLID, color: '2563EB' },
+                    shading: { type: ShadingType.CLEAR, fill: '2563EB' },
                     children: [new Paragraph({ children: [new TextRun({ text: 'Tiêu chí', bold: true, color: 'FFFFFF', size: 22, font: 'Times New Roman' })] })],
                 }),
                 new TableCell({
                     width: { size: 2000, type: WidthType.DXA },
-                    shading: { type: ShadingType.SOLID, color: '2563EB' },
+                    shading: { type: ShadingType.CLEAR, fill: '2563EB' },
                     children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Kết quả', bold: true, color: 'FFFFFF', size: 22, font: 'Times New Roman' })] })],
                 }),
             ],
@@ -376,7 +376,7 @@ async function generateDocx(result) {
                         children: [new Paragraph({ children: [new TextRun({ text: pt.title, size: 22, font: 'Times New Roman' })] })],
                     }),
                     new TableCell({
-                        shading: { type: ShadingType.SOLID, color: pt.isCorrect ? 'D1FAE5' : 'FEE2E2' },
+                        shading: { type: ShadingType.CLEAR, fill: pt.isCorrect ? 'D1FAE5' : 'FEE2E2' },
                         children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: pt.isCorrect ? 'ĐẠT' : 'KHÔNG ĐẠT', bold: true, size: 22, color: pt.isCorrect ? '065F46' : '991B1B', font: 'Times New Roman' })] })],
                     }),
                 ],
