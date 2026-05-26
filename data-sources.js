@@ -162,6 +162,84 @@ LĨNH VỰC NÔNG NGHIỆP:
 - Vai trò của Cơ quan chuyên môn (Cấp xã): Quản lý thống kê - Trực tiếp kê khai, thống kê cơ sở chăn nuôi, hộ chăn nuôi; giám sát dịch bệnh tại chỗ; huy động lực lượng địa phương chống dịch hại.`
     },
 
+    // ========== NGUỒN 7: LUẬT ĐẤT ĐAI 2024 ==========
+    {
+        id: "source_luat_datdai_2024",
+        name: "Luật Đất đai 2024 (số 31/2024/QH15)",
+        date: "2024",
+        category: "Luật",
+        content: `LUẬT ĐẤT ĐAI 2024 (SỐ 31/2024/QH15) VÀ CÁC LUẬT SỬA ĐỔI, BỔ SUNG LIÊN QUAN
+
+1. QUYỀN HẠN CỦA NHÀ NƯỚC VÀ QUYỀN, NGHĨA VỤ CỦA CÔNG DÂN, NGƯỜI SỬ DỤNG ĐẤT
+
+Quyền của Nhà nước: Đất đai thuộc sở hữu toàn dân do Nhà nước đại diện chủ sở hữu và thống nhất quản lý. Nhà nước có quyền quyết định quy hoạch, mục đích, hạn mức, thời hạn sử dụng đất, cũng như quyết định thu hồi, giao đất, cho thuê đất và định giá đất.
+
+Quyền và nghĩa vụ của công dân: Công dân có quyền tiếp cận các thông tin đất đai (quy hoạch, kế hoạch sử dụng đất, bảng giá đất, phương án bồi thường, v.v.) và có nghĩa vụ chấp hành quy định pháp luật, bảo vệ và phát triển tài nguyên đất.
+
+Quyền của người sử dụng đất: Người sử dụng đất được cấp Giấy chứng nhận, được hưởng thành quả lao động từ đất và được thực hiện các quyền: chuyển đổi, chuyển nhượng, cho thuê, cho thuê lại, thừa kế, tặng cho, thế chấp, góp vốn bằng quyền sử dụng đất. Người gốc Việt Nam định cư ở nước ngoài cũng được hưởng nhiều quyền lợi như nhận quyền sử dụng đất trong các dự án phát triển nhà ở hoặc được mua, thuê mua nhà ở gắn liền với quyền sử dụng đất ở.
+
+2. QUY HOẠCH VÀ KẾ HOẠCH SỬ DỤNG ĐẤT
+
+Hệ thống quy hoạch, kế hoạch sử dụng đất được phân cấp bao gồm: cấp quốc gia, cấp tỉnh, cấp huyện, quy hoạch đất quốc phòng và quy hoạch đất an ninh.
+
+Thời kỳ quy hoạch: Thời kỳ quy hoạch sử dụng đất cấp huyện là 10 năm (tầm nhìn 20 năm); trong khi kế hoạch sử dụng đất cấp huyện được lập hằng năm. Việc lập quy hoạch phải bảo đảm dân chủ, công khai, minh bạch và có sự tham gia của các tổ chức chính trị - xã hội, cộng đồng, cá nhân.
+
+3. THU HỒI ĐẤT VÀ TRƯNG DỤNG ĐẤT
+
+Thu hồi đất: Nhà nước quyết định thu hồi đất trong các trường hợp:
+- Vì mục đích quốc phòng, an ninh.
+- Phát triển kinh tế - xã hội vì lợi ích quốc gia, công cộng.
+- Do vi phạm pháp luật về đất đai (ví dụ: lấn chiếm đất, đất trồng cây hằng năm không sử dụng 12 tháng liên tục, chậm tiến độ dự án 24 tháng, v.v.).
+- Do chấm dứt việc sử dụng đất theo pháp luật, tự nguyện trả lại đất, hoặc đất có nguy cơ đe dọa tính mạng con người (đất trong khu vực ô nhiễm độc hại, sạt lở, sụt lún).
+
+Trưng dụng đất: Chỉ được áp dụng trong tình trạng thật cần thiết để thực hiện nhiệm vụ quốc phòng, an ninh hoặc trong tình trạng chiến tranh, khẩn cấp, phòng chống thiên tai.
+
+4. BỒI THƯỜNG, HỖ TRỢ VÀ TÁI ĐỊNH CƯ
+
+Nguyên tắc bồi thường: Phải bảo đảm dân chủ, khách quan, công bằng, công khai, kịp thời và đúng quy định pháp luật. Việc bồi thường được thực hiện bằng đất có cùng mục đích sử dụng, bằng tiền, hoặc bằng đất khác mục đích/nhà ở nếu địa phương có quỹ đất.
+
+Bồi thường thiệt hại tài sản: Bồi thường theo giá trị xây dựng mới đối với nhà ở, công trình phục vụ sinh hoạt; bồi thường chi phí di chuyển tài sản và thiệt hại đối với cây trồng, vật nuôi.
+
+Hỗ trợ: Người dân bị thu hồi đất được hưởng các khoản hỗ trợ ổn định đời sống, hỗ trợ ổn định sản xuất, kinh doanh, di dời vật nuôi, đào tạo, chuyển đổi nghề và tìm kiếm việc làm.
+
+Tái định cư: Khu tái định cư phải đạt tiêu chuẩn nông thôn mới hoặc đô thị, ưu tiên vị trí thuận lợi và bố trí tại địa bàn cấp xã nơi có đất bị thu hồi trước.
+
+5. GIAO ĐẤT, CHO THUÊ ĐẤT VÀ CHUYỂN MỤC ĐÍCH SỬ DỤNG ĐẤT
+
+Căn cứ giao, cho thuê đất: Dựa trên kết quả trúng đấu giá quyền sử dụng đất, trúng đấu thầu lựa chọn nhà đầu tư, hoặc không thông qua đấu giá, đấu thầu (tùy từng trường hợp cụ thể).
+
+Hình thức: Nhà nước giao đất không thu tiền sử dụng đất, giao đất có thu tiền sử dụng đất, hoặc cho thuê đất (trả tiền hằng năm hoặc trả tiền một lần cho cả thời gian thuê).
+
+Chuyển mục đích sử dụng đất: Phải được cơ quan nhà nước có thẩm quyền cho phép đối với các trường hợp chuyển đất trồng lúa, đất rừng đặc dụng, rừng phòng hộ, rừng sản xuất sang mục đích khác; hoặc chuyển đất nông nghiệp sang phi nông nghiệp.
+
+6. TÀI CHÍNH VỀ ĐẤT ĐAI VÀ GIÁ ĐẤT
+
+Tài chính đất đai: Các khoản thu ngân sách từ đất đai bao gồm: tiền sử dụng đất, tiền thuê đất, tiền xử phạt vi phạm hành chính, tiền bồi thường cho Nhà nước, các loại thuế, phí và lệ phí.
+
+Giá đất:
+- Nguyên tắc định giá: Dựa trên phương pháp thị trường, tuân thủ đúng trình tự, bảo đảm tính độc lập, khách quan. Các phương pháp định giá bao gồm: so sánh, thu nhập, thặng dư và hệ số điều chỉnh giá đất.
+- Bảng giá đất: Áp dụng để tính tiền sử dụng đất, tiền thuê đất, tính thuế, phí, lệ phí, tiền xử phạt vi phạm. Bảng giá đất được xây dựng theo khu vực, vị trí hoặc đến từng thửa đất nếu có cơ sở dữ liệu số hóa.
+- Giá đất cụ thể: Được sử dụng để tính tiền bồi thường khi Nhà nước thu hồi đất và tính tiền sử dụng đất, tiền thuê đất cho một số dự án không qua đấu giá, đấu thầu.
+
+7. ĐĂNG KÝ ĐẤT ĐAI VÀ CẤP GIẤY CHỨNG NHẬN (GCN)
+
+Nhà nước cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất cho người có quyền sử dụng hợp pháp. Trường hợp thửa đất có nhiều người chung quyền sử dụng, Nhà nước sẽ cấp cho mỗi người 1 GCN hoặc cấp chung 1 GCN trao cho người đại diện nếu nhóm người sử dụng đất có yêu cầu.
+
+8. CHẾ ĐỘ SỬ DỤNG ĐẤT
+
+Thời hạn sử dụng đất: Chia làm 2 loại:
+- Sử dụng ổn định lâu dài: đất ở, đất nông nghiệp do cộng đồng dân cư sử dụng, đất rừng phòng hộ, rừng đặc dụng, v.v.
+- Sử dụng có thời hạn: đất giao, cho thuê cho tổ chức/cá nhân để sản xuất kinh doanh, thực hiện dự án thường không quá 50 năm, dự án đặc biệt có thể lên tới 70 năm.
+
+Hạn mức: Quy định rõ hạn mức giao đất nông nghiệp cho cá nhân và hạn mức nhận chuyển quyền sử dụng đất nông nghiệp (không quá 15 lần hạn mức giao đất).
+
+9. GIẢI QUYẾT TRANH CHẤP VÀ XỬ LÝ VI PHẠM
+
+Nhà nước khuyến khích các bên tự hòa giải hoặc hòa giải tranh chấp đất đai ở cơ sở. Tùy thuộc vào việc có Giấy chứng nhận hay chưa, thẩm quyền giải quyết tranh chấp sẽ thuộc về Tòa án nhân dân hoặc Ủy ban nhân dân các cấp.
+
+Luật quy định xử lý nghiêm minh mọi hành vi vi phạm pháp luật đất đai đối với cả người sử dụng đất lẫn cán bộ, công chức làm công tác quản lý nhà nước về đất đai nếu có hành vi lợi dụng chức vụ, thiếu trách nhiệm gây thiệt hại.`
+    },
+
     // ========== THÊM NGUỒN MỚI TẠI ĐÂY ==========
     // Copy mẫu bên dưới, bỏ comment và điền nội dung:
     /*
